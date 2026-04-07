@@ -102,6 +102,36 @@ oranges new quantity: 2
 ERROR: Transaction failed. Quantity cannot go below 0.
 --------------------------------------------------
 --------------------------------------------------
+ERROR: Invalid filterItem format! Use: filterItem description =/</> 'VALUE' or filterItem quantity =/</> VALUE or filterItem price =/</> VALUE
+--------------------------------------------------
+--------------------------------------------------
+ERROR: Invalid filterItem format! Use: filterItem description =/</> 'VALUE' or filterItem quantity =/</> VALUE or filterItem price =/</> VALUE
+--------------------------------------------------
+--------------------------------------------------
+Here are the filtered items:
+1. apples (Quantity: 283, Price: $0.00)
+--------------------------------------------------
+--------------------------------------------------
+Here are the filtered items:
+1. oranges (Quantity: 2, Price: $0.00)
+--------------------------------------------------
+--------------------------------------------------
+Here are the filtered items:
+1. bananas (Quantity: 65, Price: $0.00)
+--------------------------------------------------
+--------------------------------------------------
+Here are the filtered items:
+1. apples (Quantity: 283, Price: $0.00)
+2. oranges (Quantity: 2, Price: $0.00)
+3. bananas (Quantity: 65, Price: $0.00)
+--------------------------------------------------
+--------------------------------------------------
+No items match the given filter.
+--------------------------------------------------
+--------------------------------------------------
+No items match the given filter.
+--------------------------------------------------
+--------------------------------------------------
 ERROR: Invalid command, please try addItem, deleteItem, editItem, transact, showHistory, listItems, help, exit
 --------------------------------------------------
 --------------------------------------------------
@@ -233,4 +263,44 @@ Example usage: exit
 
 --------------------------------------------------
 --------------------------------------------------
+Item updated: apples (Quantity: 283, Price: $9.00)
+--------------------------------------------------
+--------------------------------------------------
+Item updated: oranges (Quantity: 2, Price: $4.00)
+--------------------------------------------------
+--------------------------------------------------
+Item updated: bananas (Quantity: 65, Price: $6.00)
+--------------------------------------------------
+--------------------------------------------------
+ERROR: Preferred order not specified for listItems. Specify 'high' or 'low'.
+--------------------------------------------------
+--------------------------------------------------
+ERROR: Too many descriptors specified for listItems. Use listItems [field_name] [order]
+--------------------------------------------------
+--------------------------------------------------
+Here are your current inventory items by quantity in decreasing order:
+1. apples (Quantity: 283, Price: $9.00)
+2. bananas (Quantity: 65, Price: $6.00)
+3. oranges (Quantity: 2, Price: $4.00)
+--------------------------------------------------
+--------------------------------------------------
+Here are your current inventory items by quantity in increasing order:
+1. oranges (Quantity: 2, Price: $4.00)
+2. bananas (Quantity: 65, Price: $6.00)
+3. apples (Quantity: 283, Price: $9.00)
+--------------------------------------------------
+--------------------------------------------------
+Here are your current inventory items by price in decreasing order:
+1. apples (Quantity: 283, Price: $9.00)
+2. bananas (Quantity: 65, Price: $6.00)
+3. oranges (Quantity: 2, Price: $4.00)
+--------------------------------------------------
+--------------------------------------------------
+Here are your current inventory items by price in increasing order:
+1. oranges (Quantity: 2, Price: $4.00)
+2. bananas (Quantity: 65, Price: $6.00)
+3. apples (Quantity: 283, Price: $9.00)
+--------------------------------------------------
+--------------------------------------------------
 Bye! See you next time.
+--------------------------------------------------

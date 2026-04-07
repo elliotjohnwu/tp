@@ -43,8 +43,7 @@ class TransactionStorageTest {
                 if (!file.exists()) {
                     return entries;
                 }
-                try {
-                    java.util.Scanner s = new java.util.Scanner(file);
+                try (java.util.Scanner s = new java.util.Scanner(file)) {
                     int lineNumber = 0;
                     while (s.hasNextLine()) {
                         lineNumber++;

@@ -97,8 +97,7 @@ public abstract class Storage<T> {
             logger.log(Level.INFO, "No file found at {0}, starting fresh.", filePath);
             return items;
         }
-        try {
-            Scanner s = new Scanner(file);
+        try (Scanner s = new Scanner(file)) {
             int lineNumber = 0;
             while (s.hasNextLine()) {
                 lineNumber++;

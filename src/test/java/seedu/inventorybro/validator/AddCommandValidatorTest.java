@@ -80,4 +80,24 @@ class AddCommandValidatorTest {
                 () -> new AddCommandValidator("addItem d/Apple  q/5").validate(items)
         );
     }
+
+    /**
+     * Verifies that adding a unique name to a non-empty list passes validation.
+     * This covers the equalsIgnoreCase → false branch in DuplicateItemValidator,
+     * where the loop iterates over existing items but finds no match.
+     */
+    @Test
+    void validate_uniqueNameWithOtherItemsPresent_noException() {
+        items.addItem(new Item("Banana", 5));
+
+        assertDoesNotThrow(() -> new AddCommandValidator("addItem d/Apple q/10").validate(items));
+    }
+
+    /**
+     * Verifies that passing null as input to the constructor triggers an AssertionError.
+     */
+    @Test
+    void constructor_nullInput_throwsAssertionError() {
+        assertThrows(AssertionError.class, () -> new AddCommandValidator(null));
+    }
 }

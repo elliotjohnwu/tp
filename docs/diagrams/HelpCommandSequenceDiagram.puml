@@ -1,0 +1,57 @@
+@startuml
+!pragma teoz true
+skinparam monochrome true
+skinparam shadowing false
+
+box "Logic" #LightBlue
+participant "<<class>>\nParser" as Parser
+participant "h:HelpCommand" as HelpCommand
+participant "v:HelpCommandValidator" as HelpCommandValidator
+end box
+
+box "UI" #LightGreen
+participant "ui:Ui" as Ui
+end box
+
+-> Parser : parse("help", items, ui)
+activate Parser
+
+create HelpCommand
+Parser -> HelpCommand : new HelpCommand("help")
+activate HelpCommand
+HelpCommand --> Parser : h
+deactivate HelpCommand
+
+Parser -> HelpCommand : execute(items, ui)
+activate HelpCommand
+
+create HelpCommandValidator
+HelpCommand -> HelpCommandValidator : new HelpCommandValidator("help")
+activate HelpCommandValidator
+HelpCommandValidator --> HelpCommand : v
+deactivate HelpCommandValidator
+
+HelpCommand -> HelpCommandValidator : validate(items)
+activate HelpCommandValidator
+HelpCommandValidator --> HelpCommand
+deactivate HelpCommandValidator
+
+alt Input is only 1 word
+    HelpCommand -> Ui : showMessage(info = HELPSUMMARYMESSAGE)
+    activate Ui
+    Ui --> HelpCommand
+    deactivate Ui
+else Input has a valid command provided
+    HelpCommand -> Ui : showMessage(info = COMMANDMESSAGES)
+    activate Ui
+    Ui --> HelpCommand
+    deactivate Ui
+end
+
+HelpCommand --> Parser
+deactivate HelpCommand
+
+<-- Parser
+deactivate Parser
+
+@enduml

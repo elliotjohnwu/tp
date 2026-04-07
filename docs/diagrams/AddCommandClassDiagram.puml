@@ -1,0 +1,63 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+interface Command <<interface>> {
+    + execute(items: ItemList, ui: Ui): void
+}
+
+class AddCommand {
+    - input: String
+    + AddCommand(input: String)
+    + execute(items: ItemList, ui: Ui): void
+}
+
+interface Validator <<interface>> {
+    + validate(items: ItemList): void
+}
+
+class AddCommandValidator {
+    - input: String
+    + AddCommandValidator(input: String)
+    + validate(items: ItemList): void
+}
+
+class DuplicateItemValidator {
+    - name: String
+    + DuplicateItemValidator(name: String)
+    + validate(items: ItemList): void
+}
+
+class Item {
+    - description: String
+    - quantity: int
+    - price: double
+    + Item(description: String, quantity: int)
+    + getDescription(): String
+    + getQuantity(): int
+}
+
+class ItemList {
+    + addItem(item: Item): void
+    + size(): int
+    + getItem(index: int): Item
+}
+
+class Ui {
+    + showMessage(message: String): void
+}
+
+Command <|.. AddCommand
+Validator <|.. AddCommandValidator
+Validator <|.. DuplicateItemValidator
+
+AddCommand ..> AddCommandValidator : creates
+AddCommand ..> Item : creates
+AddCommand ..> ItemList : modifies
+AddCommand ..> Ui : uses
+AddCommandValidator ..> DuplicateItemValidator : creates
+AddCommandValidator ..> ItemList : reads
+DuplicateItemValidator ..> ItemList : reads
+
+@enduml

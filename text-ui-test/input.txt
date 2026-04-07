@@ -27,6 +27,14 @@ transact t q/80
 transact 1 q/50
 transact 2 q/-40
 transact 2 q/-39
+filterItem
+filterItem name = 'apples'
+filterItem description = 'apples'
+filterItem quantity < 10
+filterItem quantity > 10 AND quantity < 100
+filterItem price = 0
+filterItem price > 0
+filterItem description = 'ghost'
 invalidCommand
 helpinvalid
 help
@@ -40,4 +48,13 @@ help listItems
 help findItem
 help help
 help exit
+editItem 1 d/apples q/283 p/9
+editItem 2 d/oranges q/2 p/4
+editItem 3 d/bananas q/65 p/6
+listItems quantity
+listItems quantity high extraWord
+listItems quantity high
+listItems quantity low
+listItems price high
+listItems price low
 exit

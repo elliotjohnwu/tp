@@ -1,4 +1,4 @@
-package seedu.inventorybro;
+package seedu.inventorybro.validator;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,50 +7,51 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import seedu.inventorybro.Item;
+import seedu.inventorybro.ItemList;
+
 class DuplicateItemValidatorTest {
-    private DuplicateItemValidator validator;
     private ItemList items;
 
     @BeforeEach
     public void setUp() {
-        validator = new DuplicateItemValidator();
         items = new ItemList();
     }
 
     @Test
     public void validate_emptyList_doesNotThrow() {
-        assertDoesNotThrow(() -> validator.validate("Apple", items));
+        assertDoesNotThrow(() -> new DuplicateItemValidator("Apple").validate(items));
     }
 
     @Test
     public void validate_uniqueName_doesNotThrow() {
         items.addItem(new Item("Orange", 5));
-        assertDoesNotThrow(() -> validator.validate("Apple", items));
+        assertDoesNotThrow(() -> new DuplicateItemValidator("Apple").validate(items));
     }
 
     @Test
     public void validate_exactDuplicateName_throwsException() {
         items.addItem(new Item("Apple", 10));
-        assertThrows(IllegalArgumentException.class, () -> validator.validate("Apple", items));
+        assertThrows(IllegalArgumentException.class, () -> new DuplicateItemValidator("Apple").validate(items));
     }
 
     @Test
     public void validate_caseInsensitiveDuplicate_throwsException() {
         items.addItem(new Item("Apple", 10));
-        assertThrows(IllegalArgumentException.class, () -> validator.validate("apple", items));
+        assertThrows(IllegalArgumentException.class, () -> new DuplicateItemValidator("apple").validate(items));
     }
 
     @Test
     public void validate_caseInsensitiveDuplicateUppercase_throwsException() {
         items.addItem(new Item("apple", 10));
-        assertThrows(IllegalArgumentException.class, () -> validator.validate("APPLE", items));
+        assertThrows(IllegalArgumentException.class, () -> new DuplicateItemValidator("APPLE").validate(items));
     }
 
     @Test
     public void validate_duplicateErrorMessageContainsName() {
         items.addItem(new Item("Mango", 3));
         IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class, () -> validator.validate("Mango", items)
+                IllegalArgumentException.class, () -> new DuplicateItemValidator("Mango").validate(items)
         );
         assertTrue(ex.getMessage().contains("Mango"));
     }
@@ -60,7 +61,7 @@ class DuplicateItemValidatorTest {
         items.addItem(new Item("Apple", 10));
         items.addItem(new Item("Orange", 5));
         items.addItem(new Item("Mango", 3));
-        assertDoesNotThrow(() -> validator.validate("Banana", items));
+        assertDoesNotThrow(() -> new DuplicateItemValidator("Banana").validate(items));
     }
 
     @Test
@@ -68,7 +69,7 @@ class DuplicateItemValidatorTest {
         items.addItem(new Item("Apple", 10));
         items.addItem(new Item("Orange", 5));
         items.addItem(new Item("Mango", 3));
-        assertThrows(IllegalArgumentException.class, () -> validator.validate("Orange", items));
+        assertThrows(IllegalArgumentException.class, () -> new DuplicateItemValidator("Orange").validate(items));
     }
 
     @Test
@@ -76,6 +77,6 @@ class DuplicateItemValidatorTest {
         // Ensures callers trim before validating; validator itself receives a pre-trimmed name.
         // This test documents the contract: "Apple" stored, "Apple" (already trimmed) is a duplicate.
         items.addItem(new Item("Apple", 10));
-        assertThrows(IllegalArgumentException.class, () -> validator.validate("Apple", items));
+        assertThrows(IllegalArgumentException.class, () -> new DuplicateItemValidator("Apple").validate(items));
     }
 }

@@ -1,0 +1,109 @@
+@startuml
+!pragma teoz true
+skinparam monochrome true
+skinparam shadowing false
+
+box "UI" #LightGreen
+participant "ui:Ui" as Ui
+end box
+
+box "Autocomplete" #LightBlue
+participant "ac:Autocompleter" as Autocompleter
+participant "t:Trie" as Trie
+participant "n:TrieNode" as TrieNode
+end box
+
+== Initialisation ==
+
+[-> Ui : new Ui()
+activate Ui
+
+create Autocompleter
+Ui -> Autocompleter : new Autocompleter()
+activate Autocompleter
+
+create Trie
+Autocompleter -> Trie : new Trie()
+activate Trie
+
+create TrieNode
+Trie -> TrieNode : new TrieNode()
+activate TrieNode
+TrieNode --> Trie : root
+deactivate TrieNode
+
+Trie --> Autocompleter : t
+deactivate Trie
+
+note right of Autocompleter
+  Calls buildTrie():
+  iterates CommandWord.values()
+end note
+
+loop for each cmd : CommandWord.values()
+    Autocompleter -> Trie : insert(cmd.getWord())
+    activate Trie
+    Trie -> TrieNode : getOrCreateChild(ch) [per character]
+    activate TrieNode
+    TrieNode --> Trie
+    deactivate TrieNode
+    Trie -> TrieNode : setKeyword(word)
+    activate TrieNode
+    TrieNode --> Trie
+    deactivate TrieNode
+    Trie --> Autocompleter
+    deactivate Trie
+end
+
+Autocompleter --> Ui : ac
+deactivate Autocompleter
+
+[<-- Ui
+deactivate Ui
+
+== Tab-Completion (User presses Tab) ==
+
+[-> Ui : complete(reader, line, candidates)
+activate Ui
+
+note right of Ui
+  JLine calls complete()
+  when user presses Tab.
+  wordIndex == 0 check passes.
+end note
+
+Ui -> Autocompleter : getMatches(line.word())
+activate Autocompleter
+
+Autocompleter -> Trie : findWithPrefix(prefix)
+activate Trie
+
+Trie -> Trie : navigateTo(prefix.toLowerCase())
+activate Trie
+Trie --> Trie : prefixNode
+deactivate Trie
+
+Trie -> Trie : collectWords(prefixNode)
+activate Trie
+Trie --> Trie : matches
+deactivate Trie
+
+Trie --> Autocompleter : List<String>
+deactivate Trie
+
+Autocompleter --> Ui : matches
+deactivate Autocompleter
+
+loop for each keyword : matches
+    Ui -> Ui : candidates.add(new Candidate(keyword))
+end
+
+note right of Ui
+  JLine displays candidates
+  to the user in the terminal.
+end note
+
+[<-- Ui
+deactivate Ui
+
+@enduml

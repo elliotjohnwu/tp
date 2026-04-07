@@ -1,0 +1,54 @@
+@startuml
+!pragma teoz true
+skinparam monochrome true
+skinparam shadowing false
+
+box "Logic" #LightBlue
+participant "<<class>>\nParser" as Parser
+participant "td:TypoDetector" as TypoDetector
+end box
+
+box "UI" #LightGreen
+participant "ui:Ui" as Ui
+end box
+
+-> Parser : parse("adItem d/Apple q/5", items, ui)
+activate Parser
+
+Parser -> Parser : parseCommand("adItem d/Apple q/5")
+activate Parser
+Parser --> Parser : null
+deactivate Parser
+
+Parser -> Parser : handleUnknownCommand("adItem d/Apple q/5", ui)
+activate Parser
+
+Parser -> TypoDetector : findClosestMatch("adItem")
+activate TypoDetector
+
+note right of TypoDetector
+  Iterates KNOWN_COMMANDS.
+  For each command, calls
+  calculateWeightedEditDistance()
+  using QWERTY keyboard Manhattan
+  distance as substitution cost.
+  Returns best match if distance
+  is below TYPO_THRESHOLD_FACTOR
+  * max(input.length, cmd.length).
+end note
+
+TypoDetector --> Parser : Optional.of("addItem")
+deactivate TypoDetector
+
+Parser -> Ui : showMessage("Do you mean addItem?")
+activate Ui
+Ui --> Parser
+deactivate Ui
+
+Parser --> Parser
+deactivate Parser
+
+<-- Parser
+deactivate Parser
+
+@enduml

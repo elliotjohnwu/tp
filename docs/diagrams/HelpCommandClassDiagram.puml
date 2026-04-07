@@ -1,0 +1,47 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+interface Command <<interface>>{
+    + execute(items: ItemList, ui: Ui): void
+}
+
+class HelpCommand {
+    {static} - HELPSUMMARYMESSAGE: String = "Command names and their summaries:..."
+    {static} - HELPADDITEMMESSAGE: String = "addItem:..."
+    {static} - HELPDELETEITEMMESSAGE: String = "deleteItem:..."
+    {static} - HELPEDITITEMMESSAGE: String = "editItem:..."
+    {static} - HELPFINDITEMMESSAGE: String = "findItem:..."
+    {static} - HELPTRANSACTMESSAGE: String = "transact:..."
+    {static} - HELPLISTITEMSMESSAGE: String = "listItems:..."
+    {static} - HELPHELPMESSAGE: String = "help:..."
+    {static} - HELPEXITMESSAGE: String = "exit:..."
+    {static} - COMMANDMESSAGES: Map<String, String>
+    - input: String
+    + HelpCommand(input: String)
+    + execute(items: ItemList, ui: Ui): void
+}
+
+interface Validator <<interface>>{
+    + validate(items: ItemList): void
+}
+
+class HelpCommandValidator {
+    - input: String
+    + HelpCommandValidator(input: String)
+    + validate(items: ItemList): void
+    - validateCommandSpecified(words: String[])
+}
+
+class Ui {
+    + showMessage(message: String): void
+}
+
+Command <|.. HelpCommand
+Validator <|.. HelpCommandValidator
+
+HelpCommand ..> HelpCommandValidator : creates
+HelpCommand ..> Ui : uses
+
+@enduml

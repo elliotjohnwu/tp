@@ -15,7 +15,7 @@ import seedu.inventorybro.validator.HelpCommandValidator;
  * instruction of the command specified in the input.
  */
 public class HelpCommand implements Command {
-    private static final String helpSummaryMessage = """
+    private static final String HELPSUMMARYMESSAGE = """
             Command names and their summaries:
             addItem:    Adds a new item of a given quantity to the current inventory list.
             deleteItem: Deletes an item from the current inventory list.
@@ -35,14 +35,14 @@ public class HelpCommand implements Command {
 
             For further details on a particular command, specify it using 'help [COMMAND_NAME]'.
             """;
-    private static final String helpAddItemMessage = """
+    private static final String HELPADDITEMMESSAGE = """
             addItem:
             Adds a new item of a given name and quantity to the current inventory list.
 
             Example usage: addItem d/Apples q/10
             This adds an item named 'Apples' of quantity '10' to the inventory list.
             """;
-    private static final String helpDeleteItemMessage = """
+    private static final String HELPDELETEITEMMESSAGE = """
             deleteItem:
             Deletes an item from the current inventory list based on the provided list index.
             Enter 'listItems' to view the list index of the item you wish to delete.
@@ -50,7 +50,7 @@ public class HelpCommand implements Command {
             Example usage: deleteItem 1
             This removes the item indexed at 1 in the inventory list.
             """;
-    private static final String helpEditItemMessage = """
+    private static final String HELPEDITITEMMESSAGE = """
             editItem:
             Edits the name and/or quantity of an existing item in the current inventory list
             based on the provided list index. At least a name or quantity should be provided.
@@ -69,7 +69,15 @@ public class HelpCommand implements Command {
             This updates only the quantity of the item indexed at 1 in the inventory list to
             '20'.
             """;
-    private static final String helpTransactMessage = """
+    private static final String HELPFINDITEMMESSAGE = """
+            findItem:
+            Finds and lists all items in the inventory whose description contains the keyword.
+            The search is case-insensitive and matches partial words.
+
+            Example usage: findItem app
+            This displays all items containing 'app' in their name, such as 'Apples' or 'Pineapple'.
+            """;
+    private static final String HELPTRANSACTMESSAGE = """
             transact:
             Increases (restocking) or decreases (selling) quantity of the item based on the
             provided list index.
@@ -93,7 +101,7 @@ public class HelpCommand implements Command {
             in the inventory list, provided that it does not result in a quantity lower than 0.
             Otherwise, an error will be shown.
             """;
-    private static final String helpListItemsMessage = """
+    private static final String HELPLISTITEMSMESSAGE = """
             listItems:
             Displays the list of items and their quantities in the current inventory, or displays
             a message to the user that inventory is empty if there are no items in the current
@@ -101,7 +109,7 @@ public class HelpCommand implements Command {
 
             Example usage: listItems
             """;
-    private static final String helpHelpMessage = """
+    private static final String HELPHELPMESSAGE = """
             help:
             Displays the command names of the application and their summaries, or a command can
             be specified to display a more detailed instruction of it. You can use 'help' to view
@@ -115,30 +123,21 @@ public class HelpCommand implements Command {
             (Specifying a command): help addItem
             This displays a more detailed instruction of how to use the command 'addItem'.
             """;
-    private static final String helpExitMessage = """
+    private static final String HELPEXITMESSAGE = """
             exit:
             Closes the application.
 
             Example usage: exit
             """;
-    private static final String helpFindItemMessage = """
-            findItem:
-            Finds and lists all items in the inventory whose description contains the keyword.
-            The search is case-insensitive and matches partial words.
-
-            Example usage: findItem app
-            This displays all items containing 'app' in their name, such as 'Apples' or 'Pineapple'.
-            """;
-
-    private static final Map<String, String> commandMessages = Map.ofEntries(
-            entry("addItem", helpAddItemMessage),
-            entry("deleteItem", helpDeleteItemMessage),
-            entry("editItem", helpEditItemMessage),
-            entry("findItem", helpFindItemMessage),
-            entry("transact", helpTransactMessage),
-            entry("listItems", helpListItemsMessage),
-            entry("help", helpHelpMessage),
-            entry("exit", helpExitMessage)
+    private static final Map<String, String> COMMANDMESSAGES = Map.ofEntries(
+            entry("addItem", HELPADDITEMMESSAGE),
+            entry("deleteItem", HELPDELETEITEMMESSAGE),
+            entry("editItem", HELPEDITITEMMESSAGE),
+            entry("findItem", HELPFINDITEMMESSAGE),
+            entry("transact", HELPTRANSACTMESSAGE),
+            entry("listItems", HELPLISTITEMSMESSAGE),
+            entry("help", HELPHELPMESSAGE),
+            entry("exit", HELPEXITMESSAGE)
     );
     private final String input;
 
@@ -166,9 +165,9 @@ public class HelpCommand implements Command {
         String[] words = input.split(" ");
         String info;
         if (words.length == 1) {
-            info = helpSummaryMessage;
+            info = HELPSUMMARYMESSAGE;
         } else {
-            info = commandMessages.get(words[1]);
+            info = COMMANDMESSAGES.get(words[1]);
         }
 
         ui.showMessage(info);

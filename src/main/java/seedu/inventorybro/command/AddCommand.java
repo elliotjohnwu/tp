@@ -46,10 +46,8 @@ public class AddCommand implements Command {
         matcher.matches();
         String name = matcher.group(1).trim();
         int quantity = Integer.parseInt(matcher.group(2));
-        assert quantity >= 0 : "Parsed quantity should be non-negative";
         Item newItem = new Item(name, quantity);
         items.addItem(newItem);
-        assert items.size() > 0 : "Item list should not be empty after adding";
 
         ui.showMessage("Added: " + newItem);
     }

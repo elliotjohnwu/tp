@@ -31,6 +31,9 @@ public class InventoryBro {
             try {
                 // Pass the ui object into the parser so the commands can use it to print!
                 Parser.parse(fullCommand, items, ui);
+            } catch (ExitException e) {
+                ui.showLine();
+                System.exit(0);
             } catch (IllegalArgumentException e) {
                 // Catches all the exceptions thrown by your various Commands!
                 ui.showError(e.getMessage());

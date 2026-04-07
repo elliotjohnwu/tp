@@ -1,0 +1,43 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+interface Command <<interface>> {
+    + execute(items: ItemList, ui: Ui): void
+}
+
+class ListCommand {
+    - input: String
+    + ListCommand(input: String)
+    + execute(items: ItemList, ui: Ui): void
+}
+
+interface Validator <<interface>> {
+    + validate(items: ItemList): void
+}
+
+class ListCommandValidator {
+    - input: String
+    + ListCommandValidator(input: String)
+    + validate(items: ItemList): void
+}
+
+class ItemList {
+    + isEmpty(): boolean
+    + size(): int
+    + getItem(index: int): Item
+}
+
+class Ui {
+    + showMessage(message: String): void
+}
+
+Command <|.. ListCommand
+Validator <|.. ListCommandValidator
+
+ListCommand ..> ListCommandValidator : creates
+ListCommand ..> ItemList : reads
+ListCommand ..> Ui : uses
+
+@enduml

@@ -1,0 +1,54 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+class Ui {
+    - autocompleter: Autocompleter
+    - isInteractive: boolean
+    - lineReader: LineReader
+    - fallbackReader: BufferedReader
+    + Ui()
+    + readCommand(): String
+    + showWelcome(): void
+    + showMessage(message: String): void
+    + showError(message: String): void
+    - buildLineReader(): LineReader
+    - complete(reader: LineReader, line: ParsedLine, candidates: List<Candidate>): void
+}
+
+class Autocompleter {
+    - trie: Trie
+    + Autocompleter()
+    + getMatches(partial: String): List<String>
+    - buildTrie(): Trie
+}
+
+class Trie {
+    - root: TrieNode
+    + Trie()
+    + insert(word: String): void
+    + findWithPrefix(prefix: String): List<String>
+    - navigateTo(prefix: String): TrieNode
+    - collectWords(node: TrieNode): List<String>
+    - collectWordsRecursively(node: TrieNode, results: List<String>): void
+}
+
+class TrieNode {
+    - children: Map<Character, TrieNode>
+    - keyword: String
+    + TrieNode()
+    + getOrCreateChild(ch: char): TrieNode
+    + getChild(ch: char): TrieNode
+    + getChildNodes(): Collection<TrieNode>
+    + isEndOfWord(): boolean
+    + setKeyword(keyword: String): void
+    + getKeyword(): String
+}
+
+Ui *-- Autocompleter : autocompleter
+Autocompleter *-- Trie : trie
+Trie *-- TrieNode : root
+TrieNode *-- TrieNode : children
+
+@enduml

@@ -1,0 +1,78 @@
+@startuml
+!pragma teoz true
+skinparam monochrome true
+skinparam shadowing false
+
+box "Logic" #LightBlue
+participant "<<class>>\nParser" as Parser
+participant "l:ListCommand" as ListCommand
+participant "v:ListCommandValidator" as ListCommandValidator
+end box
+
+box "Data" #LightYellow
+participant "items:ItemList" as ItemList
+end box
+
+box "UI" #LightGreen
+participant "ui:Ui" as Ui
+end box
+
+-> Parser : parse("listItems", items, ui)
+activate Parser
+
+create ListCommand
+Parser -> ListCommand : new ListCommand("listItems")
+activate ListCommand
+ListCommand --> Parser : l
+deactivate ListCommand
+
+Parser -> ListCommand : execute(items, ui)
+activate ListCommand
+
+create ListCommandValidator
+ListCommand -> ListCommandValidator : new ListCommandValidator(""listItems")
+activate ListCommandValidator
+ListCommandValidator --> ListCommand : v
+deactivate ListCommandValidator
+
+ListCommand -> ListCommandValidator : validate(items)
+activate ListCommandValidator
+ListCommandValidator --> ListCommand
+deactivate ListCommandValidator
+
+alt List is empty
+    ListCommand -> Ui : showMessage("Your inventory is empty.")
+    activate Ui
+    Ui --> ListCommand
+    deactivate Ui
+else List is not empty
+    ListCommand -> Ui : showMessage("Here are your current inventory items:")
+    activate Ui
+    Ui --> ListCommand
+    deactivate Ui
+
+    loop items
+        ListCommand -> ItemList : size()
+        activate ItemList
+        ItemList --> ListCommand : size
+        deactivate ItemList
+
+        ListCommand -> ItemList : getItem(listIndex)
+        activate ItemList
+        ItemList --> ListCommand : item
+        deactivate ItemList
+
+        ListCommand -> Ui : showMessage(itemDetails)
+        activate Ui
+        Ui --> ListCommand
+        deactivate Ui
+    end
+end
+
+ListCommand --> Parser
+deactivate ListCommand
+
+<-- Parser
+deactivate Parser
+
+@enduml

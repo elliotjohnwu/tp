@@ -15,7 +15,8 @@ public enum CommandWord {
     LIST_ITEMS("listItems"),
     HELP("help"),
     EXIT("exit"),
-    FIND_ITEM("findItem");
+    FIND_ITEM("findItem"),
+    FILTER_ITEM("filterItem");
 
     private final String word;
 

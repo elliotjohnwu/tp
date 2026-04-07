@@ -1,0 +1,62 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+interface Command <<interface>> {
+    + execute(items: ItemList, ui: Ui): void
+}
+
+class FilterCommand {
+    - input: String
+    + FilterCommand(input: String)
+    + execute(items: ItemList, ui: Ui): void
+    - buildAndGroups(predicates: List, operators: List): List
+    - collectMatchingItems(items: ItemList, andGroups: List): List
+    - passesFilter(item: Item, andGroups: List): boolean
+    - andGroupPasses(item: Item, group: List): boolean
+    - evaluatePredicate(item: Item, field: String, operator: String, rawValue: String): boolean
+    - satisfiesOperator(cmp: int, operator: String): boolean
+}
+
+interface Validator <<interface>> {
+    + validate(items: ItemList): void
+}
+
+class FilterCommandValidator {
+    - input: String
+    + FilterCommandValidator(input: String)
+    + validate(items: ItemList): void
+    - validateGaps(logic: String, matchRanges: List): void
+    - validatePredicates(predicates: List): void
+    - validateSinglePredicate(pred: String[]): void
+}
+
+class Item {
+    - description: String
+    - quantity: int
+    - price: double
+    + getDescription(): String
+    + getQuantity(): int
+    + getPrice(): double
+}
+
+class ItemList {
+    + getItem(index: int): Item
+    + size(): int
+}
+
+class Ui {
+    + showMessage(message: String): void
+}
+
+Command <|.. FilterCommand
+Validator <|.. FilterCommandValidator
+
+FilterCommand ..> FilterCommandValidator : creates
+FilterCommand ..> ItemList : reads
+FilterCommand ..> Item : evaluates
+FilterCommand ..> Ui : uses
+FilterCommandValidator ..> ItemList : reads
+
+@enduml

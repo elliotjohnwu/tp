@@ -3,7 +3,6 @@ package seedu.inventorybro.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import seedu.inventorybro.DuplicateItemValidator;
 import seedu.inventorybro.ItemList;
 
 //@@author kenpegrasio
@@ -34,7 +33,6 @@ public class AddCommandValidator implements Validator {
      */
     @Override
     public void validate(ItemList items) {
-        assert input != null : "Input should not be null";
         Matcher matcher = ADD_COMMAND_PATTERN.matcher(input);
         if (!matcher.matches()) {
             throw new IllegalArgumentException(
@@ -42,6 +40,6 @@ public class AddCommandValidator implements Validator {
             );
         }
         String name = matcher.group(1).trim();
-        new DuplicateItemValidator().validate(name, items);
+        new DuplicateItemValidator(name).validate(items);
     }
 }

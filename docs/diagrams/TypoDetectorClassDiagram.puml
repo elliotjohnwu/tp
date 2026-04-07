@@ -1,0 +1,34 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+class Parser {
+    - TYPO_DETECTOR: TypoDetector
+    + {static} parse(line: String, items: ItemList, ui: Ui): void
+    - {static} parseCommand(line: String): Command
+    - {static} handleUnknownCommand(line: String, ui: Ui): void
+    - {static} extractFirstWord(line: String): String
+}
+
+class TypoDetector {
+    - KNOWN_COMMANDS: List<String>
+    - TYPO_THRESHOLD_FACTOR: double
+    - KEY_POSITIONS: Map<Character, int[]>
+    + findClosestMatch(inputWord: String): Optional<String>
+    - isBelowTypoThreshold(distance: double, input: String, command: String): boolean
+    - calculateWeightedEditDistance(s1: String, s2: String): double
+    - computeCell(dp: double[][], s1: String, s2: String, i: int, j: int): double
+    - keyboardDistance(a: char, b: char): double
+    - {static} buildKeyPositions(): Map<Character, int[]>
+}
+
+class Ui {
+    + showMessage(message: String): void
+    + showError(message: String): void
+}
+
+Parser ..> TypoDetector : uses
+Parser ..> Ui : uses
+
+@enduml

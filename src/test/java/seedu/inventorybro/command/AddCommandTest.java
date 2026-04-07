@@ -1,6 +1,7 @@
 package seedu.inventorybro.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -44,5 +45,32 @@ class AddCommandTest {
 
         assertEquals("Green Apple", item.getDescription());
         assertEquals(25, item.getQuantity());
+    }
+
+    /**
+     * Verifies that passing null as input to the constructor triggers an AssertionError.
+     */
+    @Test
+    void constructor_nullInput_throwsAssertionError() {
+        assertThrows(AssertionError.class, () -> new AddCommand(null));
+    }
+
+    /**
+     * Verifies that passing null as the item list triggers an AssertionError.
+     */
+    @Test
+    void execute_nullItems_throwsAssertionError() {
+        assertThrows(AssertionError.class,
+                () -> new AddCommand("addItem d/Apple q/10").execute(null, ui));
+    }
+
+    /**
+     * Verifies that passing null as the UI triggers an AssertionError.
+     */
+    @Test
+    void execute_nullUi_throwsAssertionError() {
+        ItemList items = new ItemList();
+        assertThrows(AssertionError.class,
+                () -> new AddCommand("addItem d/Apple q/10").execute(items, null));
     }
 }

@@ -1,0 +1,92 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+box "Logic" #LightBlue
+participant "<<class>>\nParser" as Parser
+participant "d:FilterCommand" as FilterCommand
+participant "v:FilterCommandValidator" as FilterCommandValidator
+end box
+
+box "Data" #LightYellow
+participant "items:ItemList" as ItemList
+participant "item:Item" as Item
+end box
+
+box "UI" #LightGreen
+participant "ui:Ui" as Ui
+end box
+
+-> Parser : parse("filterItem quantity > 10", items, ui)
+activate Parser
+
+create FilterCommand
+Parser -> FilterCommand : new FilterCommand("filterItem quantity > 10")
+activate FilterCommand
+FilterCommand --> Parser : d
+deactivate FilterCommand
+
+Parser -> FilterCommand : execute(items, ui)
+activate FilterCommand
+
+create FilterCommandValidator
+FilterCommand -> FilterCommandValidator : new FilterCommandValidator("filterItem quantity > 10")
+activate FilterCommandValidator
+FilterCommandValidator --> FilterCommand : v
+deactivate FilterCommandValidator
+
+FilterCommand -> FilterCommandValidator : validate(items)
+activate FilterCommandValidator
+note right of FilterCommandValidator
+  Checks input starts with "filterItem "
+  Extracts predicates via regex
+  Validates gaps (AND/OR between predicates)
+  Validates value types per field
+end note
+FilterCommandValidator --> FilterCommand
+deactivate FilterCommandValidator
+
+FilterCommand -> FilterCommand : buildAndGroups(predicates, operators)
+note right : Groups consecutive AND predicates;\nOR starts a new group
+
+FilterCommand -> FilterCommand : collectMatchingItems(items, andGroups)
+activate FilterCommand
+
+loop for each item in ItemList
+    FilterCommand -> ItemList : getItem(i)
+    activate ItemList
+    ItemList --> FilterCommand : item
+    deactivate ItemList
+
+    FilterCommand -> Item : getQuantity() / getDescription() / getPrice()
+    activate Item
+    Item --> FilterCommand : value
+    deactivate Item
+
+    FilterCommand -> FilterCommand : passesFilter(item, andGroups)
+    note right : Item passes if it satisfies\nall predicates in at least one AND-group
+end
+
+FilterCommand --> FilterCommand : results
+deactivate FilterCommand
+
+alt results is empty
+    FilterCommand -> Ui : showMessage("No items match the given filter.")
+else results not empty
+    FilterCommand -> Ui : showMessage("Here are the filtered items:")
+    loop for each matching item
+        FilterCommand -> Ui : println(index + ". " + item)
+    end
+end
+
+activate Ui
+Ui --> FilterCommand
+deactivate Ui
+
+FilterCommand --> Parser
+deactivate FilterCommand
+
+<-- Parser
+deactivate Parser
+
+@enduml

@@ -1,0 +1,82 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+box "Logic" #LightBlue
+participant "<<class>>\nParser" as Parser
+participant "d:AddCommand" as AddCommand
+participant "v:AddCommandValidator" as AddCommandValidator
+participant "dup:DuplicateItemValidator" as DuplicateItemValidator
+end box
+
+box "Data" #LightYellow
+participant "items:ItemList" as ItemList
+participant "newItem:Item" as Item
+end box
+
+box "UI" #LightGreen
+participant "ui:Ui" as Ui
+end box
+
+-> Parser : parse("addItem d/Apple q/50", items, ui)
+activate Parser
+
+create AddCommand
+Parser -> AddCommand : new AddCommand("addItem d/Apple q/50")
+activate AddCommand
+AddCommand --> Parser : d
+deactivate AddCommand
+
+Parser -> AddCommand : execute(items, ui)
+activate AddCommand
+
+create AddCommandValidator
+AddCommand -> AddCommandValidator : new AddCommandValidator("addItem d/Apple q/50")
+activate AddCommandValidator
+AddCommandValidator --> AddCommand : v
+deactivate AddCommandValidator
+
+AddCommand -> AddCommandValidator : validate(items)
+activate AddCommandValidator
+
+create DuplicateItemValidator
+AddCommandValidator -> DuplicateItemValidator : new DuplicateItemValidator("Apple")
+activate DuplicateItemValidator
+DuplicateItemValidator --> AddCommandValidator : dup
+deactivate DuplicateItemValidator
+
+AddCommandValidator -> DuplicateItemValidator : validate(items)
+activate DuplicateItemValidator
+DuplicateItemValidator -> ItemList : getItem(i) [for each item]
+activate ItemList
+ItemList --> DuplicateItemValidator : item
+deactivate ItemList
+DuplicateItemValidator --> AddCommandValidator
+deactivate DuplicateItemValidator
+
+AddCommandValidator --> AddCommand
+deactivate AddCommandValidator
+
+create Item
+AddCommand -> Item : new Item("Apple", 50)
+activate Item
+Item --> AddCommand : newItem
+deactivate Item
+
+AddCommand -> ItemList : addItem(newItem)
+activate ItemList
+ItemList --> AddCommand
+deactivate ItemList
+
+AddCommand -> Ui : showMessage("Added: Apple (Quantity: 50, Price: $0.00)")
+activate Ui
+Ui --> AddCommand
+deactivate Ui
+
+AddCommand --> Parser
+deactivate AddCommand
+
+<-- Parser
+deactivate Parser
+
+@enduml

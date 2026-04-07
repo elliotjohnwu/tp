@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
+import seedu.inventorybro.validator.FindCommandValidator;
 
 /**
  * Finds and lists all items in the inventory whose description contains the keyword.
@@ -21,6 +22,7 @@ public class FindCommand implements Command {
      * @param input The full find command string.
      */
     public FindCommand(String input) {
+        assert input != null : "Input should not be null";
         this.input = input;
     }
 
@@ -32,18 +34,16 @@ public class FindCommand implements Command {
      */
     @Override
     public void execute(ItemList items, Ui ui) {
+        assert items != null : "ItemList should not be null";
+        assert ui != null : "Ui should not be null";
+
+        new FindCommandValidator(input).validate(items);
+
         Matcher matcher = FIND_COMMAND_PATTERN.matcher(input);
-        String[] words = input.split(" ", 2);
-
-        if (!matcher.matches() || matcher.group(1).trim().isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Invalid find format! Use: findItem KEYWORD"
-            );
-        }
-
+        matcher.matches();
         String keyword = matcher.group(1).trim().toLowerCase();
-        boolean isFound = false;
 
+        boolean isFound = false;
 
         for (int i = 0; i < items.size(); i++) {
             Item item = items.getItem(i);

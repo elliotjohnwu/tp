@@ -16,13 +16,17 @@ import seedu.inventorybro.ItemList;
 class ListCommandValidatorTest {
 
     /**
-     * Verifies that the exact "listItems" input passes validation.
+     * Verifies that the exact listItems input passes validation.
      */
     @Test
     void validate_validInput_noException() {
         ItemList items = new ItemList();
 
         assertDoesNotThrow(() -> new ListCommandValidator("listItems").validate(items));
+        assertDoesNotThrow(() -> new ListCommandValidator("listItems quantity high").validate(items));
+        assertDoesNotThrow(() -> new ListCommandValidator("listItems quantity low").validate(items));
+        assertDoesNotThrow(() -> new ListCommandValidator("listItems price high").validate(items));
+        assertDoesNotThrow(() -> new ListCommandValidator("listItems price low").validate(items));
     }
 
     /**
@@ -40,16 +44,32 @@ class ListCommandValidatorTest {
     }
 
     /**
-     * Verifies that extra arguments after listItems are rejected.
+     * Verifies that invalid descriptors in user input are rejected.
      */
     @Test
-    void validate_extraArguments_throwsException() {
+    void validate_invalidDescriptors_throwsException() {
         ItemList items = new ItemList();
-        items.addItem(new Item("Apple", 50));
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new ListCommandValidator("LiSt all").validate(items)
+                () -> new ListCommandValidator("listItems invalidField").validate(items)
+        );
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new ListCommandValidator("listItems quantity invalidOrder").validate(items)
+        );
+    }
+
+    /**
+     * Verifies that extra descriptors in user input for are rejected.
+     */
+    @Test
+    void validate_extraDescriptors_throwsException() {
+        ItemList items = new ItemList();
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new ListCommandValidator("ListItems quantity price high").validate(items)
         );
     }
 
