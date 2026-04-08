@@ -1,1 +1,2 @@
-20 | heyo
+100 | Sprite Bottle
+50 | Coke Can

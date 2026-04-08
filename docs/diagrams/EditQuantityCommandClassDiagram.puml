@@ -1,0 +1,46 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+interface Command <<interface>> {
+    + execute(items: ItemList, ui: Ui): void
+}
+
+class EditQuantityCommand {
+    - input: String
+    + EditQuantityCommand(input: String)
+    + execute(items: ItemList, ui: Ui): void
+}
+
+interface Validator <<interface>> {
+    + validate(items: ItemList): void
+}
+
+class EditQuantityCommandValidator {
+    - input: String
+    + EditQuantityCommandValidator(input: String)
+    + validate(items: ItemList): void
+}
+
+class ItemList {
+    + getItem(index: int): Item
+    + size(): int
+}
+
+class Item {
+    + setQuantity(quantity: int): void
+}
+
+class Ui {
+    + showMessage(message: String): void
+}
+
+Command <|.. EditQuantityCommand
+Validator <|.. EditQuantityCommandValidator
+EditQuantityCommand ..> EditQuantityCommandValidator : creates/validates
+EditQuantityCommand ..> ItemList : reads
+EditQuantityCommand ..> Item : modifies
+EditQuantityCommand ..> Ui : uses
+
+@enduml

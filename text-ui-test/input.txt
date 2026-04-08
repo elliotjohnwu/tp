@@ -18,10 +18,10 @@ deleteItem 0
 deleteItem 23
 deleteItem s
 deleteItem 3
-editItem
-editItem 90 d/newName q/newQ
-editItem 2 d/newName q/newQ
-editItem 2 d/newName q/39
+editDescription
+editDescription 90 d/newName
+editQuantity 0 q/10
+editQuantity 99 q/39
 transact
 transact t q/80
 transact 1 q/50
@@ -48,9 +48,9 @@ help listItems
 help findItem
 help help
 help exit
-editItem 1 d/apples q/283 p/9
-editItem 2 d/oranges q/2 p/4
-editItem 3 d/bananas q/65 p/6
+editPrice 1 p/9
+editPrice 2 p/4
+editPrice 3 p/6
 listItems quantity
 listItems quantity high extraWord
 listItems quantity high

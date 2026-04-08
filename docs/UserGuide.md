@@ -22,7 +22,7 @@ If you prefer typing commands instead of clicking buttons, InventoryBRO allows y
 ## Notes About Command Format
 * Words in `UPPER_CASE` represent parameters supplied by the user.
     * *Example:* `addItem d/NAME q/QUANTITY`
-* Parameters prefixed with letters (e.g., `d/`, `q/`) must be included exactly as shown.
+* Parameters prefixed with letters (e.g., `d/`, `q/`, `p/`) must be included exactly as shown.
 * Parameters can be provided in any order unless stated otherwise.
 * Commands are **case-insensitive**. Typing `add` and `ADD` will both execute the same action.
 * **INDEX** refers to the number shown in the displayed item list and must be a positive integer (1, 2, 3, ...).
@@ -63,17 +63,38 @@ Deletes an item permanently from the inventory.
   Now you have 3 items in the list.
   ```
 
-### 3. Editing an Item: `editItem`
-Edits the name and/or quantity of an item based on its index. At least one of the optional fields must be provided. Existing values will be overwritten.
+### 3. Editing an Item's Description: `editDescription`
+Updates the description of an existing item in the inventory.
 
-* **Format:** `editItem INDEX (n/NAME) (q/QUANTITY) (p/PRICE)`
-* **Examples & Output:**
+* **Format:** `editDescription INDEX d/NEW_DESCRIPTION`
+* **Example:** `editDescription 1 d/Sprite Bottle`
+* **Expected Output:**
   ```text
-  > editItem 1 n/Coke Can q/50 p/3
-  Item updated: apple (Quantity: 200, Price: $3.00)
+  Item description updated: Sprite Bottle (Quantity: 50, Price: $0.00)
   ```
-### 4. Viewing All Items: `listItems`
-Displays a numbered list of all items currently in your inventory. Indicate a field and order to view the list of items sorted based on them. The options for `[FIELD]` are `quantity` and `price`. The options for `[ORDER]` are `high` for descending order and `low` for ascending order.
+
+### 4. Editing an Item's Price: `editPrice`
+Updates the price of an existing item in the inventory.
+
+* **Format:** `editPrice INDEX p/NEW_PRICE`
+* **Example:** `editPrice 1 p/2.50`
+* **Expected Output:**
+  ```text
+  Item price updated: Coke Can (Quantity: 50, Price: $2.50)
+  ```
+
+### 5. Editing an Item's Quantity: `editQuantity`
+Updates the quantity of an existing item in the inventory.
+
+* **Format:** `editQuantity INDEX q/NEW_QUANTITY`
+* **Example:** `editQuantity 1 q/100`
+* **Expected Output:**
+  ```text
+  Item quantity updated: Coke Can (Quantity: 100, Price: $0.00)
+  ```
+
+### 6. Viewing All Items: `listItems`
+Displays a numbered list of all items currently in your inventory.
 
 * **Format:** `listItems` or `listItems [FIELD] [ORDER]`
 * **Examples and output:**
@@ -97,7 +118,7 @@ Displays a numbered list of all items currently in your inventory. Indicate a fi
   3. Potato Chips (Quantity: 20, Price: $3.00)
   ```
 
-### 5. Finding an Item: `findItem`
+### 7. Finding an Item: `findItem`
 Searches for items whose descriptions contain your specified keyword. This is case-insensitive.
 
 * **Format:** `findItem KEYWORD`
@@ -108,7 +129,7 @@ Searches for items whose descriptions contain your specified keyword. This is ca
   1. Coke Can (Quantity: 50, Price: $1.50)
   ```
 
-### 6. Filtering Items: `filterItem`
+### 8. Filtering Items: `filterItem`
 Displays only the items that match one or more field-based predicates. Predicates can be combined using `AND` (both must match) and `OR` (either must match). `AND` binds tighter than `OR`.
 
 Supported fields and value types:
@@ -149,7 +170,7 @@ Supported fields and value types:
 
 > **Note:** Description values must always be wrapped in single quotes. Quantity and price values must be whole numbers — decimals are not accepted.
 
-### 7. Recording a Transaction: `transact`
+### 9. Recording a Transaction: `transact`
 Updates the stock quantity after a sale or restock.
 * Use a **negative number** for a sale.
 * Use a **positive number** for a restock.
@@ -166,7 +187,7 @@ Updates the stock quantity after a sale or restock.
   Sprite Bottle new quantity: 40
   ```
 
-### 8. Viewing Transaction History: `showHistory`
+### 10. Viewing Transaction History: `showHistory`
 Displays a complete, numbered list of all past transactions (sales and restocks) recorded by the application.
 
 * **Format:** `showHistory`
@@ -182,7 +203,7 @@ Displays a complete, numbered list of all past transactions (sales and restocks)
   No transaction history found.
   ```
 
-### 9. Getting Help: `help`
+### 11. Getting Help: `help`
 Displays a quick-reference list of all available commands, or provides detailed instructions and examples for a specific command.
 
 * **Format 1 (General Summary):** `help`
@@ -195,14 +216,12 @@ Displays a quick-reference list of all available commands, or provides detailed 
       ```text
       addItem:
       Adds a new item of a given name and quantity to the current inventory list.
-  
+
       Example usage: addItem d/Apples q/10
       This adds an item named 'Apples' of quantity '10' to the inventory list.
       ```
 
-* **Format:** `help`
-
-### 10. Exiting the Program: `exit`
+### 12. Exiting the Program: `exit`
 Safely closes the application.
 
 * **Format:** `exit`
@@ -275,18 +294,19 @@ If you accidentally misspell a command, InventoryBRO will attempt to detect the 
 
 ## Command Summary
 
-| Action | Format                                           | Example |
-| :--- |:-------------------------------------------------| :--- |
-| **Add item** | `addItem d/NAME q/QUANTITY`                      | `addItem d/Coke q/50` |
-| **Delete item** | `deleteItem INDEX`                               | `deleteItem 2` |
-| **Edit item** | `editItem INDEX (n/NAME) (q/QUANTITY) (p/PRICE)` | `editItem 2 n/New Coke Name` |
-| **List items** | `listItems`                                      | `listItems` |
-| **Find item** | `findItem KEYWORD`                               | `findItem apple` |
-| **Filter items** | `filterItem FIELD OP VALUE [AND\|OR ...]`        | `filterItem quantity > 10` |
-| **Record transaction** | `transact INDEX q/CHANGE`                        | `transact 1 q/-3` |
-| **View History** | `showHistory`                                    | `showHistory` |
-| **Get Help** | `help`                                           | `help` |
-| **Exit** | `exit`                                           | `exit` |
+| Action | Format | Example |
+| :--- | :--- | :--- |
+| **Add item** | `addItem d/NAME q/QUANTITY` | `addItem d/Coke q/50` |
+| **Delete item** | `deleteItem INDEX` | `deleteItem 2` |
+| **Edit description** | `editDescription INDEX d/NEW_DESCRIPTION` | `editDescription 1 d/Coke Can` |
+| **Edit price** | `editPrice INDEX p/NEW_PRICE` | `editPrice 1 p/2.50` |
+| **Edit quantity** | `editQuantity INDEX q/NEW_QUANTITY` | `editQuantity 1 q/100` |
+| **List items** | `listItems` | `listItems` |
+| **Find item** | `findItem KEYWORD` | `findItem apple` |
+| **Filter items** | `filterItem FIELD OP VALUE [AND\|OR ...]` | `filterItem quantity > 10` |
+| **Record transaction** | `transact INDEX q/CHANGE` | `transact 1 q/-3` |
+| **Get Help** | `help` | `help` |
+| **Exit** | `exit` | `exit` |
 
 ---
 
@@ -298,5 +318,5 @@ InventoryBRO v2.0 officially supports:
 * Automatic background saving
 
 **Planned for Future Versions:**
+* Add price tracking to items
 * Low-stock automated alerts
-* Edit individual fields for each item instead of requiring all fields

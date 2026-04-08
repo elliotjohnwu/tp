@@ -73,16 +73,16 @@ Noted, BRO. I've removed this item:
 Now you have 3 items in the list.
 --------------------------------------------------
 --------------------------------------------------
-ERROR: Invalid edit format. Use: edit INDEX d/NEW_NAME q/NEW_QUANTITY p/NEW_PRICE
+ERROR: Invalid editDescription format. Use: editDescription INDEX d/NEW_DESCRIPTION
 --------------------------------------------------
 --------------------------------------------------
 ERROR: Invalid index.
 --------------------------------------------------
 --------------------------------------------------
-ERROR: Invalid edit format. Use: edit INDEX d/NEW_NAME q/NEW_QUANTITY p/NEW_PRICE
+ERROR: Invalid index.
 --------------------------------------------------
 --------------------------------------------------
-ERROR: Invalid edit format. Use: edit INDEX d/NEW_NAME q/NEW_QUANTITY p/NEW_PRICE
+ERROR: Invalid index.
 --------------------------------------------------
 --------------------------------------------------
 ERROR: Invalid transact format. Use: transact INDEX q/CHANGE_IN_QUANTITY
@@ -263,13 +263,13 @@ Example usage: exit
 
 --------------------------------------------------
 --------------------------------------------------
-Item updated: apples (Quantity: 283, Price: $9.00)
+Item price updated: apples (Quantity: 283, Price: $9.00)
 --------------------------------------------------
 --------------------------------------------------
-Item updated: oranges (Quantity: 2, Price: $4.00)
+Item price updated: oranges (Quantity: 2, Price: $4.00)
 --------------------------------------------------
 --------------------------------------------------
-Item updated: bananas (Quantity: 65, Price: $6.00)
+Item price updated: bananas (Quantity: 65, Price: $6.00)
 --------------------------------------------------
 --------------------------------------------------
 ERROR: Preferred order not specified for listItems. Specify 'high' or 'low'.

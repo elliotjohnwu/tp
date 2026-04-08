@@ -4,14 +4,13 @@ import seedu.inventorybro.ExitException;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
 
-/**
- * Terminates the application.
- */
+//@@author vionyp
 public class ExitCommand implements Command {
     /**
      * Prints the farewell message and exits the program.
      *
      * @param items The inventory item list, unused for this command.
+     * @param ui The UI instance used to display the farewell message.
      */
     @Override
     public void execute(ItemList items, Ui ui) {
@@ -19,3 +18,4 @@ public class ExitCommand implements Command {
         throw new ExitException();
     }
 }
+//@@author

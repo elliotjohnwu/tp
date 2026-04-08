@@ -33,9 +33,41 @@ class AutocompleterTest {
     @Test
     void getMatches_partialMultipleMatches_returnsAllMatches() {
         List<String> matches = autocompleter.getMatches("e");
-        assertEquals(2, matches.size());
-        assertTrue(matches.contains("editItem"));
+        assertEquals(4, matches.size()); // editDescription + editPrice + editQuantity + exit
+        assertTrue(matches.contains("editDescription"));
+        assertTrue(matches.contains("editPrice"));
+        assertTrue(matches.contains("editQuantity"));
         assertTrue(matches.contains("exit"));
+    }
+
+    @Test
+    void getMatches_editPrefix_returnsAllEditCommands() {
+        List<String> matches = autocompleter.getMatches("edit");
+        assertEquals(3, matches.size());
+        assertTrue(matches.contains("editDescription"));
+        assertTrue(matches.contains("editPrice"));
+        assertTrue(matches.contains("editQuantity"));
+    }
+
+    @Test
+    void getMatches_editDescriptionExact_returnsSingleMatch() {
+        List<String> matches = autocompleter.getMatches("editDescription");
+        assertEquals(1, matches.size());
+        assertEquals("editDescription", matches.get(0));
+    }
+
+    @Test
+    void getMatches_editPriceExact_returnsSingleMatch() {
+        List<String> matches = autocompleter.getMatches("editPrice");
+        assertEquals(1, matches.size());
+        assertEquals("editPrice", matches.get(0));
+    }
+
+    @Test
+    void getMatches_editQuantityExact_returnsSingleMatch() {
+        List<String> matches = autocompleter.getMatches("editQuantity");
+        assertEquals(1, matches.size());
+        assertEquals("editQuantity", matches.get(0));
     }
 
     @Test
@@ -47,7 +79,7 @@ class AutocompleterTest {
     @Test
     void getMatches_emptyString_returnsAllKeywords() {
         List<String> matches = autocompleter.getMatches("");
-        assertEquals(10, matches.size());
+        assertEquals(12, matches.size());
     }
 
     @Test

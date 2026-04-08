@@ -1,0 +1,46 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+interface Command <<interface>> {
+    + execute(items: ItemList, ui: Ui): void
+}
+
+class EditDescriptionCommand {
+    - input: String
+    + EditDescriptionCommand(input: String)
+    + execute(items: ItemList, ui: Ui): void
+}
+
+interface Validator <<interface>> {
+    + validate(items: ItemList): void
+}
+
+class EditDescriptionCommandValidator {
+    - input: String
+    + EditDescriptionCommandValidator(input: String)
+    + validate(items: ItemList): void
+}
+
+class ItemList {
+    + getItem(index: int): Item
+    + size(): int
+}
+
+class Item {
+    + setDescription(description: String): void
+}
+
+class Ui {
+    + showMessage(message: String): void
+}
+
+Command <|.. EditDescriptionCommand
+Validator <|.. EditDescriptionCommandValidator
+EditDescriptionCommand ..> EditDescriptionCommandValidator : creates/validates
+EditDescriptionCommand ..> ItemList : reads
+EditDescriptionCommand ..> Item : modifies
+EditDescriptionCommand ..> Ui : uses
+
+@enduml
