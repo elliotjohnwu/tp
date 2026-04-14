@@ -3,7 +3,6 @@ package seedu.inventorybro;
 import seedu.inventorybro.storage.ArrayStorage;
 import seedu.inventorybro.storage.CategoryStorage;
 import seedu.inventorybro.storage.TransactionStorage;
-import seedu.inventorybro.command.EditDescriptionCommand;
 
 import java.io.IOException;
 
@@ -27,7 +26,6 @@ public class InventoryBro {
         items = arrayStorage.loadItemList();
 
         transactionStorage = new TransactionStorage();
-        EditDescriptionCommand.setTransactionStorage(transactionStorage);
     }
 
     private void loadCategories() {

@@ -52,7 +52,8 @@ public class Parser {
         case "editquantity":
             return new EditQuantityCommand(normalize(trimmedLine, CommandWord.EDIT_QUANTITY.getWord()));
         case "editdescription":
-            return new EditDescriptionCommand(normalize(trimmedLine, CommandWord.EDIT_DESCRIPTION.getWord()));
+            return new EditDescriptionCommand(normalize(trimmedLine, CommandWord.EDIT_DESCRIPTION.getWord()),
+                    transactionStorage);
         case "editprice":
             return new EditPriceCommand(normalize(trimmedLine, CommandWord.EDIT_PRICE.getWord()));
         case "editcategory":

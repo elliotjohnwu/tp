@@ -13,26 +13,18 @@ import seedu.inventorybro.storage.TransactionStorage;
 //@@author vionyp
 public class EditDescriptionCommand implements Command {
     private final String input;
-    private static TransactionStorage transactionStorage;
+    private final TransactionStorage transactionStorage;
 
     /**
      * Creates an editDescription command from the raw user input.
      *
-     * @param input The full editDescription command string.
+     * @param input              The full editDescription command string.
+     * @param transactionStorage The storage used to keep transaction history in sync; may be null.
      */
-    public EditDescriptionCommand(String input) {
+    public EditDescriptionCommand(String input, TransactionStorage transactionStorage) {
         assert input != null : "Input should not be null";
         this.input = input;
-    }
-
-    /**
-     * Sets the shared TransactionStorage instance used to keep transaction history
-     * in sync when an item is renamed. Called once during application initialisation.
-     *
-     * @param storage The TransactionStorage instance to use.
-     */
-    public static void setTransactionStorage(TransactionStorage storage) {
-        transactionStorage = storage;
+        this.transactionStorage = transactionStorage;
     }
 
     /**
