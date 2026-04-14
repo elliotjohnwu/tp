@@ -58,7 +58,7 @@ public class TransactionStorage extends Storage<String> {
         ArrayList<String> updated = new ArrayList<>();
         for (String entry : history) {
             String[] parts = entry.split(" \\| ");
-            if (parts.length >= 3 && parts[0].trim().equalsIgnoreCase(oldName)) {
+            if (parts.length >= 3 && parts[0].trim().equals(oldName)) {
                 updated.add(newName + " | " + parts[1].trim() + " | " + parts[2].trim());
             } else {
                 updated.add(entry);

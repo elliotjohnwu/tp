@@ -2,6 +2,7 @@ package seedu.inventorybro.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 
@@ -52,9 +53,9 @@ class EditDescriptionCommandTest {
         ArrayList<String> history = stub.load();
         assertEquals(2, history.size());
         // Old "Apple" entries should now be "Green Apple"
-        assertEquals(true, history.get(0).startsWith("Green Apple |"));
+        assertTrue(history.get(0).startsWith("Green Apple |"));
         // Unrelated "Banana" entry should be unchanged
-        assertEquals(true, history.get(1).startsWith("Banana |"));
+        assertTrue(history.get(1).startsWith("Banana |"));
     }
 
     @Test
