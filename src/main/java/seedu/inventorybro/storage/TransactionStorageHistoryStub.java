@@ -42,4 +42,16 @@ public class TransactionStorageHistoryStub extends TransactionStorage {
     public ArrayList<String> load() {
         return entries;
     }
+
+    /**
+     * Replaces the in-memory entries with the provided list instead of writing to a file.
+     * This allows {@code updateItemName} to work correctly in tests.
+     *
+     * @param items The updated list of entries.
+     */
+    @Override
+    public void saveArray(ArrayList<String> items) {
+        entries.clear();
+        entries.addAll(items);
+    }
 }

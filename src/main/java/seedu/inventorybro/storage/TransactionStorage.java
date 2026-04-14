@@ -45,6 +45,33 @@ public class TransactionStorage extends Storage<String> {
     }
 
     /**
+     * Updates all transaction history entries that match oldName to use newName.
+     * Loads the full history, rewrites matching entries, then saves back to file.
+     *
+     * @param oldName The previous item name to search for.
+     * @param newName The new item name to replace it with.
+     */
+    public void updateItemName(String oldName, String newName) {
+        assert oldName != null && !oldName.isEmpty() : "Old name should not be null or empty";
+        assert newName != null && !newName.isEmpty() : "New name should not be null or empty";
+        ArrayList<String> history = load();
+        ArrayList<String> updated = new ArrayList<>();
+        for (String entry : history) {
+            String[] parts = entry.split(" \\| ");
+            if (parts.length >= 3 && parts[0].trim().equalsIgnoreCase(oldName)) {
+                updated.add(newName + " | " + parts[1].trim() + " | " + parts[2].trim());
+            } else {
+                updated.add(entry);
+            }
+        }
+        try {
+            saveArray(updated);
+        } catch (IOException e) {
+            logger.log(Level.WARNING, "Could not update item name in transaction history: {0}", e.getMessage());
+        }
+    }
+
+    /**
      * Encodes a history entry string — no conversion needed.
      *
      * @param entry The string entry to encode.

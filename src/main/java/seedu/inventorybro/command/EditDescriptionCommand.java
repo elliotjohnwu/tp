@@ -5,6 +5,7 @@ import seedu.inventorybro.ItemList;
 import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.Ui;
 import seedu.inventorybro.validator.EditDescriptionCommandValidator;
+import seedu.inventorybro.storage.TransactionStorage;
 
 /**
  * Updates an existing item's description.
@@ -12,6 +13,7 @@ import seedu.inventorybro.validator.EditDescriptionCommandValidator;
 //@@author vionyp
 public class EditDescriptionCommand implements Command {
     private final String input;
+    private static TransactionStorage transactionStorage;
 
     /**
      * Creates an editDescription command from the raw user input.
@@ -24,10 +26,22 @@ public class EditDescriptionCommand implements Command {
     }
 
     /**
-     * Validates and updates the targeted item's description.
+     * Sets the shared TransactionStorage instance used to keep transaction history
+     * in sync when an item is renamed. Called once during application initialisation.
      *
-     * @param items The inventory item list to update.
-     * @param ui    The UI to display messages.
+     * @param storage The TransactionStorage instance to use.
+     */
+    public static void setTransactionStorage(TransactionStorage storage) {
+        transactionStorage = storage;
+    }
+
+    /**
+     * Validates and updates the targeted item's description.
+     * Also updates all matching entries in the transaction history.
+     *
+     * @param items      The inventory item list to update.
+     * @param categories The category list.
+     * @param ui         The UI to display messages.
      */
     @Override
     public void execute(ItemList items, CategoryList categories, Ui ui) {
@@ -42,7 +56,12 @@ public class EditDescriptionCommand implements Command {
         String newDescription = parts[1].trim();
 
         Item item = items.getItem(index);
+        String oldDescription = item.getDescription();
         item.setDescription(newDescription);
+
+        if (transactionStorage != null) {
+            transactionStorage.updateItemName(oldDescription, newDescription);
+        }
 
         ui.showMessage("Item description updated: " + item);
     }

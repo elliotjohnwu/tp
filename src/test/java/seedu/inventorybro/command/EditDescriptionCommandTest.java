@@ -3,6 +3,9 @@ package seedu.inventorybro.command;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +13,7 @@ import seedu.inventorybro.CategoryList;
 import seedu.inventorybro.Item;
 import seedu.inventorybro.ItemList;
 import seedu.inventorybro.Ui;
+import seedu.inventorybro.storage.TransactionStorageHistoryStub;
 
 class EditDescriptionCommandTest {
 
@@ -24,6 +28,40 @@ class EditDescriptionCommandTest {
         items.addItem(new Item("Apple", 5, 0.0, categories.getCategory("Others")));
         items.addItem(new Item("Banana", 3, 0.0, categories.getCategory("Others")));
         items.addItem(new Item("Cherry", 8, 0.0, categories.getCategory("Others")));
+    }
+
+    @AfterEach
+    void tearDown() {
+        // Reset static storage so tests remain isolated
+        EditDescriptionCommand.setTransactionStorage(null);
+    }
+
+    // -------------------------------------------------------------------------
+    // Transaction history sync
+    // -------------------------------------------------------------------------
+
+    @Test
+    void execute_renameItem_transactionHistoryUpdated() {
+        TransactionStorageHistoryStub stub = new TransactionStorageHistoryStub(new ArrayList<>());
+        stub.saveHistory("Apple", -3);
+        stub.saveHistory("Banana", 5);
+        EditDescriptionCommand.setTransactionStorage(stub);
+
+        new EditDescriptionCommand("editDescription 1 d/Green Apple").execute(items, categories, ui);
+
+        ArrayList<String> history = stub.load();
+        assertEquals(2, history.size());
+        // Old "Apple" entries should now be "Green Apple"
+        assertEquals(true, history.get(0).startsWith("Green Apple |"));
+        // Unrelated "Banana" entry should be unchanged
+        assertEquals(true, history.get(1).startsWith("Banana |"));
+    }
+
+    @Test
+    void execute_renameItem_noStorageSet_doesNotThrow() {
+        // Ensure no transactionStorage is set (tearDown clears it)
+        new EditDescriptionCommand("editDescription 1 d/Green Apple").execute(items, categories, ui);
+        assertEquals("Green Apple", items.getItem(0).getDescription());
     }
 
     // -------------------------------------------------------------------------
